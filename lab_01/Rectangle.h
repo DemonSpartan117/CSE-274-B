@@ -12,6 +12,7 @@ class Rectangle{
 private:
 		int width;
 		int height;
+		int area;
 public:
 		void set_values (int, int);
 		int area();

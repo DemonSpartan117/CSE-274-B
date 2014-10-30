@@ -11,6 +11,7 @@
 
 #include "ArrayDeque.h"
 
+using namespace std;
 namespace ods {
 
 template<class N>
@@ -45,6 +46,7 @@ public:
 	virtual void traverse();
 	virtual void traverse2();
 	virtual void bfTraverse();
+	virtual int height2(Node* current); //one of my added methods for homework
 };
 
 class BTNode1 : public BTNode<BTNode1> { };
@@ -136,6 +138,10 @@ int BinaryTree<Node>::size2() {
 
 template<class Node>
 int BinaryTree<Node>::height() {
+	/*the below cout statement is for testing purposes only
+	 * I added it to make sure the height2 and height methods
+	 * get the same results*/
+	cout << "height2 output: " << height2(r) << endl;
 	return height(r);
 }
 
@@ -186,6 +192,68 @@ void BinaryTree<Node>::bfTraverse() {
 		if (u->right != nil) q.add(q.size(),u->right);
 	}
 }
+
+/* the below is the first method I created for the
+ * homework. (Tested and proved to work)*/
+template<class Node>
+int BinaryTree<Node>::height2(Node* current) {
+	/* only increment the compare int. height will be
+	 * determined by comparing the biggest height so far
+	 * to what compare is at the moment (so the depth of
+	 * the current node).*/
+	int height = 0;
+	int compare = 0;
+	/* The below is copied and pasted from the traverse2 function
+	 * I will use it as a basis for the height2 function*/
+	Node *prev = nil, *next;
+		while (current != nil) {
+
+			if(height < compare && current != nil) {
+				height = compare;
+			}//stand alone for our height variable
+
+			if (prev == current->parent) {
+
+				if (current->left != nil) {
+					next = current->left;
+					compare++;
+				}
+
+				else if (current->right != nil) {
+					next = current->right;
+					compare++;
+				}
+
+				else {
+					next = current->parent; // go back up
+					compare--;
+				}
+			}//if statement
+
+			else if (prev == current->left) { //when coming back up from the left
+
+				if (current->right != nil) {
+					next = current->right;
+					compare++;
+				}
+
+				else {
+					next = current->parent;
+					compare--;
+				}
+			}//else if statement
+
+			else {
+				compare--;
+				next = current->parent;
+			}
+			prev = current;
+			current = next;
+		}//end of copy and paste
+
+		return height;
+}
+
 
 
 } /* namespace ods */

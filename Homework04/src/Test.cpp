@@ -16,6 +16,14 @@ int randomNum() {
 	return rand();
 }
 
+void PrintBalanceResult(bool ToF) {
+	if(ToF) {
+		cout << "The tree is balanced" << endl;
+	}
+	else {
+		cout << "The tree is not balanced" << endl;
+	}
+}
 
 int main() {
 	cout << "Time to start Binary Trees for homework" << endl; // prints Time to start Binary Trees for homework
@@ -32,6 +40,33 @@ int main() {
 	cout << "original height output: " << tree1.height() << endl;
 	/* because both of the outputs of the height functions match
 	 * i conclude that my version of the function does indeed work*/
+
+	cout << endl << "Time to test the is balanced function now" <<endl;
+
+	PrintBalanceResult(tree1.isBalanced()); //the proper result is returned
+
+	BinarySearchTree<BSTNode1<int>, int> tree2;
+	tree2.add(50);
+	PrintBalanceResult(tree2.isBalanced());
+	tree2.add(25);
+	PrintBalanceResult(tree2.isBalanced());
+	tree2.add(75);
+	PrintBalanceResult(tree2.isBalanced());
+	tree2.add(90);
+	PrintBalanceResult(tree2.isBalanced());
+	/*if all the above return true I know that most of my logic
+	 * is correct in the parts with the size of the child nodes
+	 * are equal or only differ by one (or don't exist)*/
+	/*NOTE: they all passed as expected. To see proof just uncomment
+	 * the test code above. I commented them out so the consul will
+	 * be less cluttered.Now to continue testing without checking to
+	 * see if it is balanced after every addition to the binary search
+	 * tree (but still need to see frequently*/
+
+	tree2.add(100);
+	PrintBalanceResult(tree2.isBalanced());//not balanced now
+	//TODO: test it a bit more just to be sure
+
 
 	return 0;
 }

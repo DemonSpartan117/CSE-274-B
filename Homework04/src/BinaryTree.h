@@ -34,6 +34,8 @@ protected:
 	virtual int size(Node *u);
 	virtual int height(Node *u);
 	virtual void traverse(Node *u);
+	virtual bool isBalanced(Node *current); //made for homework
+	virtual int isBalanced10(Node *current); //made for homework till it works the right way
 public:
 	virtual ~BinaryTree();
 	BinaryTree();
@@ -46,7 +48,8 @@ public:
 	virtual void traverse();
 	virtual void traverse2();
 	virtual void bfTraverse();
-	virtual int height2(Node* current); //one of my added methods for homework
+	virtual int height2(Node* current); //(check) one of my added methods for homework
+	virtual bool isBalanced(); //one of the methods added for homework
 };
 
 class BTNode1 : public BTNode<BTNode1> { };
@@ -254,7 +257,57 @@ int BinaryTree<Node>::height2(Node* current) {
 		return height;
 }
 
+template<class Node>
+bool BinaryTree<Node>::isBalanced() {
+	if(isBalanced10(r) == -1) {
+		return false;
+	}
+	return true;
+}
 
+template<class Node>
+bool BinaryTree<Node>::isBalanced(Node *current) {
+	if(current == nil) {
+		return true;
+	}
 
+	else if(current->left == nil && current->right == nil) {
+		return true;
+	}
+
+	else if(size(current->left) - size(current->right) >= -1 &&
+			size(current->left) - size(current->right) <= 1) {
+		return isBalanced(current->left) && isBalanced(current->right);
+	}
+
+	return false;
+	//it is not balanced if any node does not pass at least one of the above tests
+}
+
+template<class Node>
+int BinaryTree<Node>::isBalanced10(Node *current) {
+	if (current == nil) return 0;
+
+	int leftSize = isBalanced10(current->left);
+	int rightSize = isBalanced10(current->right);
+
+	if(leftSize == -1 || rightSize == -1) {
+		return -1;
+	}
+
+	int difference = leftSize - rightSize;
+
+	if(difference >= -1 && difference <= 1) {
+		return 1 + leftSize + rightSize;
+	}
+
+	return -1; //just in case
+}
+
+					/*
+					 *	if (u == nil) return 0;
+					 *		return 1 + size(u->left) + size(u->right);
+					 *	}
+					 */
 } /* namespace ods */
 #endif /* BINARYTREE_H_ */

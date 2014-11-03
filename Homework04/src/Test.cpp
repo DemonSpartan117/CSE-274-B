@@ -47,13 +47,13 @@ int main() {
 
 	BinarySearchTree<BSTNode1<int>, int> tree2;
 	tree2.add(50);
-	PrintBalanceResult(tree2.isBalanced());
+	//PrintBalanceResult(tree2.isBalanced());
 	tree2.add(25);
-	PrintBalanceResult(tree2.isBalanced());
+	//PrintBalanceResult(tree2.isBalanced());
 	tree2.add(75);
-	PrintBalanceResult(tree2.isBalanced());
+	//PrintBalanceResult(tree2.isBalanced());
 	tree2.add(90);
-	PrintBalanceResult(tree2.isBalanced());
+	//PrintBalanceResult(tree2.isBalanced());
 	/*if all the above return true I know that most of my logic
 	 * is correct in the parts with the size of the child nodes
 	 * are equal or only differ by one (or don't exist)*/
@@ -65,8 +65,19 @@ int main() {
 
 	tree2.add(100);
 	PrintBalanceResult(tree2.isBalanced());//not balanced now
-	//TODO: test it a bit more just to be sure
+	tree2.add(30);
+	tree2.add(65);
+	tree2.add(15);
+	tree2.add(5);
+	PrintBalanceResult(tree2.isBalanced()); //balanced again
+	tree2.add(80);
+	tree2.add(20);
+	PrintBalanceResult(tree2.isBalanced());//not balanced
+	tree2.add(29);
+	tree2.add(70);
+	PrintBalanceResult(tree2.isBalanced());//balanced it again and I am done
 
+	cout << endl << "now isBalanced has been tested so moving on" << endl << endl;
 
 	return 0;
 }

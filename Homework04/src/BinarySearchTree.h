@@ -12,12 +12,16 @@
 #include "BinaryTree.h"
 #include "utils.h"
 
+using namespace std;
 namespace ods {
 
 template<class Node, class T>
 class BSTNode : public BTNode<Node> {
 public:
 	T x;
+	int inOrder;
+	int postOrder;
+	int preOrder;
 };
 
 /**
@@ -38,6 +42,10 @@ protected:
 	virtual void rotateRight(Node *u);
 	virtual void rotateLeft(Node *u);
 	virtual bool add(Node *u);
+	//below methods made for homework
+	virtual void preOrderNumber(Node *current, int* count);
+	virtual void postOrderNumber(Node *current, int* count);
+	virtual void inOrderNumber(Node *current, int* count);
 public:
 	BinarySearchTree();
 	BinarySearchTree(T null);
@@ -48,6 +56,10 @@ public:
 	virtual T findEQ(T x);
 	virtual int size();
 	virtual void clear();
+	//below methods made for homework
+	virtual void preOrderNumber();
+	virtual void postOrderNumber();
+	virtual void inOrderNumber();
 };
 
 template<class T>
@@ -271,7 +283,74 @@ void BinarySearchTree<Node, T>::rotateRight(Node *u) {
 	if (u == r) { r = w; r->parent = nil; }
 }
 
+/* all of the cout statements are strictly for testing purposes and should be ignored.
+ * They are needed to make the testing class work and that is a part of the assignment
+ * so there you go. I don't like it but it's what I got.*/
+template<class Node, class T>
+void BinarySearchTree<Node, T>::preOrderNumber() {
+	int count = 0;
+	cout << "time for some Pre-Ordered Numbers" << endl << endl;
+	preOrderNumber(r, &count);
+	cout << "end of the pre-ordered numbers" << endl << endl;
+}
 
+template<class Node, class T>
+void BinarySearchTree<Node, T>::preOrderNumber(Node *current, int* count) {
+
+	if(current == nil) return;
+
+	*count = *count + 1;
+	current->preOrder = *count;
+	cout << "Node: " << current->x << " has pre ordered number " << current->preOrder << endl;
+
+	preOrderNumber(current->left, count);
+	preOrderNumber(current->right, count);
+}
+
+template<class Node, class T>
+void BinarySearchTree<Node, T>::inOrderNumber() {
+	int count = 0;
+	cout << "time for some In Order Numbers" << endl << endl;
+	inOrderNumber(r, &count);
+	cout << "end of the in ordered numbers" << endl << endl;
+}
+
+template<class Node, class T>
+void BinarySearchTree<Node, T>::inOrderNumber(Node *current, int* count) {
+
+	if(current == nil) return;
+
+
+	inOrderNumber(current->left, count);
+
+	*count = *count + 1;
+	current->inOrder = *count;
+	cout << "Node: " << current->x << " has in ordered number " << current->inOrder << endl;
+
+	inOrderNumber(current->right, count);
+}
+
+template<class Node, class T>
+void BinarySearchTree<Node, T>::postOrderNumber() {
+	int count = 0;
+	cout << "time for some Post Order Numbers" << endl << endl;
+	postOrderNumber(r, &count);
+	cout << "end of the post ordered numbers" << endl << endl;
+}
+
+template<class Node, class T>
+void BinarySearchTree<Node, T>::postOrderNumber(Node *current, int* count) {
+
+	if(current == nil) return;
+
+
+	postOrderNumber(current->left, count);
+	postOrderNumber(current->right, count);
+
+	*count = *count + 1;
+	current->postOrder = *count;
+	cout << "Node: " << current->x << " has post ordered number " << current->postOrder << endl;
+}
 
 /*
 template<class T>

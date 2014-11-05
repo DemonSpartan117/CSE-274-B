@@ -25,25 +25,25 @@ void PrintBalanceResult(bool ToF) {
 	}
 }
 
-int main() {
-	cout << "Time to start Binary Trees for homework" << endl; // prints Time to start Binary Trees for homework
+void testPart1() {
 	BinarySearchTree<BSTNode1<int>, int> tree1;
-	cout << endl << endl << "input for the random binary tree:" << endl << endl;
-	int num = 0;
-	for(int i = 0; i < 20; i++) {
-		num = randomNum() % 1000;
-		tree1.add(num);
-		cout << num << ", ";
-	}
-	cout << endl;
+		cout << endl << endl << "input for the random binary tree:" << endl << endl;
+		int num = 0;
+		for(int i = 0; i < 20; i++) {
+			num = randomNum() % 1000;
+			tree1.add(num);
+			cout << num << ", ";
+		}
+		cout << endl;
 
-	cout << "original height output: " << tree1.height() << endl;
-	/* because both of the outputs of the height functions match
-	 * i conclude that my version of the function does indeed work*/
+		cout << "original height output: " << tree1.height() << endl;
+		/* because both of the outputs of the height functions match
+		 * i conclude that my version of the function does indeed work*/
+}
+
+void testPart2() {
 
 	cout << endl << "Time to test the is balanced function now" <<endl;
-
-	PrintBalanceResult(tree1.isBalanced()); //the proper result is returned
 
 	BinarySearchTree<BSTNode1<int>, int> tree2;
 	tree2.add(50);
@@ -78,6 +78,29 @@ int main() {
 	PrintBalanceResult(tree2.isBalanced());//balanced it again and I am done
 
 	cout << endl << "now isBalanced has been tested so moving on" << endl << endl;
+}
+
+void testPart3() {
+	BinarySearchTree<BSTNode1<int>, int> tree3;
+	tree3.add(50);
+	tree3.add(25);
+	tree3.add(75);
+	tree3.add(65);
+	tree3.add(90);
+	tree3.add(30);
+	tree3.add(15);
+
+	tree3.postOrderNumber();
+	tree3.preOrderNumber();
+	tree3.inOrderNumber();
+}
+
+int main() {
+	cout << "Time to start Binary Trees for homework" << endl; // prints Time to start Binary Trees for homework
+
+	testPart1();
+	testPart2();
+	testPart3();
 
 	return 0;
 }

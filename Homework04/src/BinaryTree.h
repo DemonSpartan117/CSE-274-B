@@ -265,7 +265,7 @@ bool BinaryTree<Node>::isBalanced() {
 }
 
 
-template<class Node> //TODO: change this to the isBalanced function and get rid of the other one
+template<class Node>
 int BinaryTree<Node>::isBalanced(Node *current) {
 	if (current == nil) return 0;
 

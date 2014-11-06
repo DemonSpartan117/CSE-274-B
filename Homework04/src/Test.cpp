@@ -95,12 +95,62 @@ void testPart3() {
 	tree3.inOrderNumber();
 }
 
+void testPart4() {
+
+	BinarySearchTree<BSTNode1<int>, int> tree3;
+	tree3.add(50);
+	tree3.add(25);
+	tree3.add(75);
+	tree3.add(65);
+	tree3.add(90);
+	tree3.add(30);
+	tree3.add(15);
+	DLList<int> list = tree3.getLE(50);
+
+	cout << "here are the items in the list" << endl;
+		for(int i = 0; i < list.size(); i++) {
+			cout << "list entry " << i << " = " << list.get(i) <<endl;
+		}
+		cout << endl << "and that is the end of the list" << endl << endl;
+}
+
+void testPart5() {
+	BinarySearchTree<BSTNode1<int>, int> tree1;
+			cout << endl << endl << "input for the random binary tree:" << endl << endl;
+			int num = 0;
+			for(int i = 0; i < 20; i++) {
+				num = randomNum() % 1000;
+				tree1.add(num);
+				cout << num << ", ";
+			}
+			cout << endl;
+
+			DLList<int> list = tree1.getLE(500);
+			cout << "here are the items in the list" << endl;
+					for(int i = 0; i < list.size(); i++) {
+						cout << "list entry " << i << " = " << list.get(i) <<endl;
+					}
+					cout << endl << "and that is the end of the list" << endl << endl;
+/*so the returned list contains repeats of pieces of data. I thought it might which is why I made this
+ * second test function (test5()). I wanted to see if the same number might be added twice because a
+ * parent node in a binary tree can be visited twice when traversing through the tree when it has two
+ * child nodes (left and right). So this makes my method more complex because of it but it also makes
+ * the traverse2 method more complex too (So i mean that this proves that the complexity of traverse2 is
+ * greater than O(n) because some nodes are visited more than once). I tried to do something to prevent
+ * numbers from being added twice to the DLList but if I did, I would have increased the complexity of  my
+ * getLE function so I left it alone and if traverse2 is actually O(n) complexity, then my getLE is the
+ * required complexity for the assignment but there was no way to do this with less complexity without
+ * using recursion so Here you go and I am done*/
+}
+
 int main() {
 	cout << "Time to start Binary Trees for homework" << endl; // prints Time to start Binary Trees for homework
 
 	testPart1();
 	testPart2();
 	testPart3();
+	testPart4();
+	testPart5();
 
 	return 0;
 }

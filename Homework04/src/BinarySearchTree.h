@@ -11,12 +11,13 @@
 #include <cmath>
 #include "BinaryTree.h"
 #include "utils.h"
+#include "DLList.h"
 
 using namespace std;
 namespace ods {
 
 template<class Node, class T>
-class BSTNode : public BTNode<Node> {
+class BSTNode: public BTNode<Node> {
 public:
 	T x;
 	int inOrder;
@@ -29,7 +30,7 @@ public:
  * of BSTNode<T> (or match it's interface)
  */
 template<class Node, class T>
-class BinarySearchTree : public BinaryTree<Node> {
+class BinarySearchTree: public BinaryTree<Node> {
 protected:
 	using BinaryTree<Node>::r;
 	using BinaryTree<Node>::nil;
@@ -46,6 +47,7 @@ protected:
 	virtual void preOrderNumber(Node *current, int* count);
 	virtual void postOrderNumber(Node *current, int* count);
 	virtual void inOrderNumber(Node *current, int* count);
+	virtual bool getLE(T data, Node *current, DLList<T> *list);
 public:
 	BinarySearchTree();
 	BinarySearchTree(T null);
@@ -60,42 +62,42 @@ public:
 	virtual void preOrderNumber();
 	virtual void postOrderNumber();
 	virtual void inOrderNumber();
+	virtual DLList<T> getLE(T x);
 };
 
 template<class T>
-class BSTNode1 : public BSTNode<BSTNode1<T>, T> { };
+class BSTNode1: public BSTNode<BSTNode1<T>, T> {
+};
 
 template<class T>
-class BinarySearchTree1 : public BinarySearchTree<BSTNode1<T>, T> {
+class BinarySearchTree1: public BinarySearchTree<BSTNode1<T>, T> {
 public:
 	BinarySearchTree1();
 };
 
-
 /*
  * FIXME: Why doesn't this work?
-template<class Node>
-BinarySearchTree<Node,int>::BinarySearchTree()  {
-	this->null = INT_MIN;
-	n = 0;
-}
-*/
+ template<class Node>
+ BinarySearchTree<Node,int>::BinarySearchTree()  {
+ this->null = INT_MIN;
+ n = 0;
+ }
+ */
 
 template<class Node, class T>
-BinarySearchTree<Node,T>::BinarySearchTree() {
-	this->null = (T)NULL;  // won't work for non-primitive types
+BinarySearchTree<Node, T>::BinarySearchTree() {
+	this->null = (T) NULL;  // won't work for non-primitive types
 	n = 0;
 }
 
-
 template<class Node, class T>
-BinarySearchTree<Node,T>::BinarySearchTree(T null) {
+BinarySearchTree<Node, T>::BinarySearchTree(T null) {
 	this->null = null;
 	n = 0;
 }
 
 template<class Node, class T>
-Node* BinarySearchTree<Node,T>::findLast(T x) {
+Node* BinarySearchTree<Node, T>::findLast(T x) {
 	Node *w = r, *prev = nil;
 	while (w != nil) {
 		prev = w;
@@ -112,7 +114,7 @@ Node* BinarySearchTree<Node,T>::findLast(T x) {
 }
 
 template<class Node, class T>
-T BinarySearchTree<Node,T>::findEQ(T x) {
+T BinarySearchTree<Node, T>::findEQ(T x) {
 	Node *w = r;
 	while (w != nil) {
 		int comp = compare(x, w->x);
@@ -128,7 +130,7 @@ T BinarySearchTree<Node,T>::findEQ(T x) {
 }
 
 template<class Node, class T>
-T BinarySearchTree<Node,T>::find(T x) {
+T BinarySearchTree<Node, T>::find(T x) {
 	Node *w = r, *z = nil;
 	while (w != nil) {
 		int comp = compare(x, w->x);
@@ -145,28 +147,28 @@ T BinarySearchTree<Node,T>::find(T x) {
 }
 
 template<class Node, class T>
-BinarySearchTree<Node,T>::~BinarySearchTree() {
+BinarySearchTree<Node, T>::~BinarySearchTree() {
 	// nothing to do - BinaryTree destructor does cleanup
 }
 
 template<class Node, class T>
 bool BinarySearchTree<Node, T>::addChild(Node *p, Node *u) {
-		if (p == nil) {
-			r = u;              // inserting into empty tree
+	if (p == nil) {
+		r = u;              // inserting into empty tree
+	} else {
+		int comp = compare(u->x, p->x);
+		if (comp < 0) {
+			p->left = u;
+		} else if (comp > 0) {
+			p->right = u;
 		} else {
-			int comp = compare(u->x, p->x);
-			if (comp < 0) {
-				p->left = u;
-			} else if (comp > 0) {
-				p->right = u;
-			} else {
-				return false;   // u.x is already in the tree
-			}
-			u->parent = p;
+			return false;   // u.x is already in the tree
 		}
-		n++;
-		return true;
+		u->parent = p;
 	}
+	n++;
+	return true;
+}
 
 template<class Node, class T>
 bool BinarySearchTree<Node, T>::add(T x) {
@@ -260,7 +262,10 @@ void BinarySearchTree<Node, T>::rotateLeft(Node *u) {
 	}
 	u->parent = w;
 	w->left = u;
-	if (u == r) { r = w; r->parent = nil; }
+	if (u == r) {
+		r = w;
+		r->parent = nil;
+	}
 }
 
 template<class Node, class T>
@@ -280,7 +285,10 @@ void BinarySearchTree<Node, T>::rotateRight(Node *u) {
 	}
 	u->parent = w;
 	w->right = u;
-	if (u == r) { r = w; r->parent = nil; }
+	if (u == r) {
+		r = w;
+		r->parent = nil;
+	}
 }
 
 /* all of the cout statements are strictly for testing purposes and should be ignored.
@@ -297,11 +305,13 @@ void BinarySearchTree<Node, T>::preOrderNumber() {
 template<class Node, class T>
 void BinarySearchTree<Node, T>::preOrderNumber(Node *current, int* count) {
 
-	if(current == nil) return;
+	if (current == nil)
+		return;
 
 	*count = *count + 1;
 	current->preOrder = *count;
-	cout << "Node: " << current->x << " has pre ordered number " << current->preOrder << endl;
+	cout << "Node: " << current->x << " has pre ordered number "
+			<< current->preOrder << endl;
 
 	preOrderNumber(current->left, count);
 	preOrderNumber(current->right, count);
@@ -318,14 +328,15 @@ void BinarySearchTree<Node, T>::inOrderNumber() {
 template<class Node, class T>
 void BinarySearchTree<Node, T>::inOrderNumber(Node *current, int* count) {
 
-	if(current == nil) return;
-
+	if (current == nil)
+		return;
 
 	inOrderNumber(current->left, count);
 
 	*count = *count + 1;
 	current->inOrder = *count;
-	cout << "Node: " << current->x << " has in ordered number " << current->inOrder << endl;
+	cout << "Node: " << current->x << " has in ordered number "
+			<< current->inOrder << endl;
 
 	inOrderNumber(current->right, count);
 }
@@ -341,27 +352,86 @@ void BinarySearchTree<Node, T>::postOrderNumber() {
 template<class Node, class T>
 void BinarySearchTree<Node, T>::postOrderNumber(Node *current, int* count) {
 
-	if(current == nil) return;
-
+	if (current == nil)
+		return;
 
 	postOrderNumber(current->left, count);
 	postOrderNumber(current->right, count);
 
 	*count = *count + 1;
 	current->postOrder = *count;
-	cout << "Node: " << current->x << " has post ordered number " << current->postOrder << endl;
+	cout << "Node: " << current->x << " has post ordered number "
+			<< current->postOrder << endl;
 }
 
 /*
-template<class T>
-BinarySearchTree1<T*>::BinarySearchTree1() : BinarySearchTree<BSTNode1<T*>, T*>(NULL) {
-}
-*/
+ template<class T>
+ BinarySearchTree1<T*>::BinarySearchTree1() : BinarySearchTree<BSTNode1<T*>, T*>(NULL) {
+ }
+ */
 
-template<class T>
-BinarySearchTree1<T>::BinarySearchTree1()  {
+template<class Node, class T>
+DLList<T> BinarySearchTree<Node, T>::getLE(T data) {
+	/* need to pay attention to lecture so I will come back to this
+	 * and when I do I will need to re-think my approach to this method
+	 * because after the first two lines below, the code is not usable
+	 * or I need to figure out exactly how to approach this*/
+	DLList<T> list;
+	Node *prev = r;
+	Node *current = r->left;
+	while (current != nil) { //this while loop makes current the smallest element in the tree
+		prev = current;
+		current = current->left;
+	} //now temp is set as the smallest element
+	current = prev; //now current is smallest too
+
+	Node *next;
+	prev = nil;
+	bool isTooBig = false;
+	while (current != nil) {
+		isTooBig = !getLE(data, current, &list);
+		if (prev == current->parent) {
+			if (isTooBig && current->left != nil) {
+				next = current->left;
+			}
+
+			else if (!isTooBig && current->right != nil) {
+				next = current->right;
+			} else
+				next = current->parent;
+		} else if (prev == current->left) {
+
+			if (isTooBig)
+				break;
+
+			if (current->right != nil)
+				next = current->right;
+			else
+				next = current->parent;
+		} else {
+			next = current->parent;
+		}
+		prev = current;
+		current = next;
+	}
+
+	return list;
 }
 
+template<class Node, class T>
+bool BinarySearchTree<Node, T>::getLE(T data, Node *current, DLList<T> *list) {
+	if (current->x > data) {
+		return false;
+	}
+	if (current->x <= data) {
+		list->add(current->x);
+		return true;
+	}
+	return true;
+}
+template<class T>
+BinarySearchTree1<T>::BinarySearchTree1() {
+}
 
 } /* namespace ods */
 #endif /* BINARYSEARCHTREE_H_ */

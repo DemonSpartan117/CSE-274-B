@@ -390,6 +390,13 @@ DLList<T> BinarySearchTree<Node, T>::getLE(T data) {
 	bool isTooBig = false;
 	while (current != nil) {
 		isTooBig = !getLE(data, current, &list);
+		if(!isTooBig && current->left == nil && current->right == nil) {
+			list.add(current->x);
+			/*so adding current->x if it is not too big and it has no children
+			 * because current will not be visited again*/
+		}
+
+
 		if (prev == current->parent) {
 			if (isTooBig && current->left != nil) {
 				next = current->left;
@@ -400,6 +407,9 @@ DLList<T> BinarySearchTree<Node, T>::getLE(T data) {
 			} else
 				next = current->parent;
 		} else if (prev == current->left) {
+			if(!isTooBig && current->left != nil) {
+				list.add(current->x);
+			}
 
 			if (isTooBig)
 				break;
@@ -410,6 +420,9 @@ DLList<T> BinarySearchTree<Node, T>::getLE(T data) {
 				next = current->parent;
 		} else {
 			next = current->parent;
+			if(!isTooBig && current->left == nil && current->right != nil) {
+				list.add(current->x);
+			}
 		}
 		prev = current;
 		current = next;
@@ -424,7 +437,7 @@ bool BinarySearchTree<Node, T>::getLE(T data, Node *current, DLList<T> *list) {
 		return false;
 	}
 	if (current->x <= data) {
-		list->add(current->x);
+
 		return true;
 	}
 	return true;
